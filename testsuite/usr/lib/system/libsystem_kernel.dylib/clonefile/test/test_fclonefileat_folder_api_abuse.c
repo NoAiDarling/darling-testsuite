@@ -11,14 +11,18 @@
 #include <sys/errno.h>
 
 #include <darling-testsuite/assertion.h>
+#include <darling-testsuite/availability.h>
 #include <darling-testsuite/file.h>
 #include <darling-testsuite/resource.h>
+#include <darling-testsuite/unsupported.h>
 
 /* 
  * Apple strongly discourages using this API for copying a folder.
  * However... some apps may try to do so.
  */
 int main() {
+// O_SEARCH was added to the xnu kernel in macOS 13
+#if MIN_VERSION_MACOS_ABI_TARGET_SUPPORTED(MACOS_13_0,MACOS_MAX_VERSION)
     // Setup
     resource_container_pt resource_container = resource_container_init();
     
@@ -74,4 +78,7 @@ int main() {
     close(copied_fileC_fd);
     close(copied_fileD_fd);
     resource_container_free(&resource_container);
+#else
+    darling_testcase_os_doesnt_support_newer_api();
+#endif
 }

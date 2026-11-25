@@ -11,9 +11,13 @@
 #include <sys/errno.h>
 
 #include <darling-testsuite/assertion.h>
+#include <darling-testsuite/availability.h>
 #include <darling-testsuite/resource.h>
+#include <darling-testsuite/unsupported.h>
 
 int main() {
+// O_SEARCH was added to the xnu kernel in macOS 13
+#if MIN_VERSION_MACOS_ABI_TARGET_SUPPORTED(MACOS_13_0,MACOS_MAX_VERSION)
     // Setup
     resource_container_pt resource_container = resource_container_init();
 
@@ -42,4 +46,7 @@ int main() {
     close(srcfd);
     close(copied_file_fd);
     resource_container_free(&resource_container);
+#else
+    darling_testcase_os_doesnt_support_newer_api();
+#endif
 }

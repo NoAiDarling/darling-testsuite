@@ -7,6 +7,7 @@
 #include <darling-testsuite/print.h>
 
 #include <CoreFoundation/CoreFoundation.h>
+#include <CoreGraphics/CoreGraphics.h>
 
 // Common
 void assert_is_true(bool expression);
